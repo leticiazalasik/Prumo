@@ -7,6 +7,8 @@ import { CreateUsuarioDto } from "./dto/create-usuario.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from 'bcrypt';
 
+const SALT_ROUNDS = 10;
+
 @Injectable()
 export class UsuarioService {
   constructor(
@@ -16,8 +18,14 @@ export class UsuarioService {
 
  async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
   try {
-     const senhaHash = await bcrypt.hash(createUsuarioDto.senha, 10)
-    return await this.usuarioRepository.save(createUsuarioDto);
+    const senhaHash = await bcrypt.hash(createUsuarioDto.senha, SALT_ROUNDS);
+
+    const usuario = this.usuarioRepository.create({
+      ...createUsuarioDto,
+      senha: senhaHash,
+    });
+
+    return await this.usuarioRepository.save(usuario);
 } catch (error: any) {
         if (error.code === '23505') {
       throw new ConflictException('Usuário ou e-mail já cadastrado.');
@@ -49,7 +57,13 @@ async update(
     id: number,
     updateUsuarioDto: UpdateUsuarioDto,
 ): Promise<Usuario | null>{
-    await this.usuarioRepository.update(id, updateUsuarioDto);
+    const dados: UpdateUsuarioDto = { ...updateUsuarioDto };
+
+    if (dados.senha) {
+      dados.senha = await bcrypt.hash(dados.senha, SALT_ROUNDS);
+    }
+
+    await this.usuarioRepository.update(id, dados);
     return this.findOne(id);
 }
 

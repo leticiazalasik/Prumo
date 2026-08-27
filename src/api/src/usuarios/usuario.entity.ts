@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { PerfilUsuario } from './perfil.enum';
 
 @Entity('Usuarios')
@@ -47,10 +48,8 @@ export class Usuario {
   @Column({ type: 'varchar', length: 50 })
   declare usuario: string;
 
-  @ApiProperty({
-    example: '123456',
-    description: 'Senha do usuário',
-  })
+  @ApiHideProperty()
+  @Exclude()
   @Column({ type: 'varchar', length: 100 })
   declare senha: string;
 

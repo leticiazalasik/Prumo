@@ -106,7 +106,6 @@ update(
       sobrenome: 'Zalasik',
       email: 'leticia@email.com',
       usuario: 'leticiaz',
-      senha: '123456',
       perfil: 'USUARIO',
       ativo: false,
     },
