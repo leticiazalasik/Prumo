@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
@@ -9,6 +9,7 @@ import { FornecedorService } from "./fornecedor.service";
 import { Fornecedor } from "./fornecedor.entity";
 import { CreateFornecedorDto } from "../usuarios/dto/create-fornecedor.dto";
 import { UpdateFornecedorDto } from "../usuarios/dto/update-fornecedor.dto";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 
 @ApiTags('Fornecedores')
 @Controller('fornecedores')
@@ -22,6 +23,7 @@ export class FornecedorController {
   type: Fornecedor,
 })
 @Post()
+@UseGuards(JwtAuthGuard)
 async create(
   @Body() createFornecedorDto: CreateFornecedorDto,
 ): Promise<Fornecedor> {
@@ -35,6 +37,7 @@ async create(
   type: [Fornecedor],
 })
 @Get()
+@UseGuards(JwtAuthGuard)
 findAll() {
   return this.fornecedorService.findAll();
 }
@@ -55,6 +58,7 @@ findAll() {
   description: 'Fornecedor não encontrado.',
 })
 @Get(':id')
+@UseGuards(JwtAuthGuard)
 findOne(@Param('id') id: number) {
   return this.fornecedorService.findOne(id);
 }
@@ -75,6 +79,7 @@ findOne(@Param('id') id: number) {
   description: 'Fornecedor não encontrado.',
 })
 @Patch(':id')
+@UseGuards(JwtAuthGuard)
 update(
   @Param('id') id: number,
   @Body() updateFornecedorDto: UpdateFornecedorDto,
@@ -104,6 +109,7 @@ update(
   },
 })
 @Delete(':id')
+@UseGuards(JwtAuthGuard)
 remove(@Param('id') id: number) {
   return this.fornecedorService.desativar(id);
 }
