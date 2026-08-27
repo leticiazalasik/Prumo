@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { PerfilUsuario } from './perfil.enum';
 
 @Entity('Usuarios')
 
@@ -54,11 +55,12 @@ export class Usuario {
   declare senha: string;
 
   @ApiProperty({
-    example: 'USER',
+    enum: PerfilUsuario,
+    example: PerfilUsuario.USUARIO,
     description: 'Perfil de acesso do usuário',
   })
-  @Column({ type: 'varchar', length: 5, default: 'USER' })
-  declare perfil: string;
+  @Column({ type: 'varchar', length: 10, default: PerfilUsuario.USUARIO })
+  declare perfil: PerfilUsuario;
 
   @ApiProperty({
     example: true,

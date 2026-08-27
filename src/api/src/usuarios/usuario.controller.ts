@@ -107,7 +107,7 @@ update(
       email: 'leticia@email.com',
       usuario: 'leticiaz',
       senha: '123456',
-      perfil: 'USER',
+      perfil: 'USUARIO',
       ativo: false,
     },
   },

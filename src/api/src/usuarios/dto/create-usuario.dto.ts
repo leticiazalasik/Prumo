@@ -1,4 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsOptional } from 'class-validator';
+import { PerfilUsuario } from '../perfil.enum';
 
 export class CreateUsuarioDto {
   @ApiProperty({
@@ -32,11 +34,14 @@ export class CreateUsuarioDto {
   senha!: string;
 
   @ApiProperty({
-    example: 'user',
+    enum: PerfilUsuario,
+    example: PerfilUsuario.USUARIO,
     description: 'Perfil do usuário',
     required: false,
   })
-  perfil?: string;
+  @IsOptional()
+  @IsEnum(PerfilUsuario)
+  perfil?: PerfilUsuario;
 
   @ApiProperty({
     example: true,

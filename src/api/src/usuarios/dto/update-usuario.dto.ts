@@ -1,4 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, IsOptional } from 'class-validator';
+import { PerfilUsuario } from '../perfil.enum';
 
 export class UpdateUsuarioDto {
   @ApiPropertyOptional({ example: 'Letícia Maria' })
@@ -16,8 +18,10 @@ export class UpdateUsuarioDto {
   @ApiPropertyOptional({ example: 'novaSenha123' })
   senha?: string;
 
-  @ApiPropertyOptional({ example: 'admin' })
-  perfil?: string;
+  @ApiPropertyOptional({ enum: PerfilUsuario, example: PerfilUsuario.ADMIN })
+  @IsOptional()
+  @IsEnum(PerfilUsuario)
+  perfil?: PerfilUsuario;
 
   @ApiPropertyOptional({ example: true })
   ativo?: boolean;
