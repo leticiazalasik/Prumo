@@ -125,7 +125,6 @@ update(
       nome: 'Letícia',
       sobrenome: 'Zalasik',
       email: 'leticia@email.com',
-      usuario: 'leticiaz',
       perfil: 'USUARIO',
       ativo: false,
     },

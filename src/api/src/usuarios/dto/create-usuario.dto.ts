@@ -38,15 +38,6 @@ export class CreateUsuarioDto {
   email!: string;
 
   @ApiProperty({
-    example: 'leticiaz',
-    description: 'Nome de usuário para acesso ao sistema',
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(50)
-  usuario!: string;
-
-  @ApiProperty({
     example: '123456',
     description: 'Senha do usuário',
   })

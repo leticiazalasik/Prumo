@@ -31,13 +31,6 @@ export class UpdateUsuarioDto {
   @MaxLength(60)
   email?: string;
 
-  @ApiPropertyOptional({ example: 'leticiaz' })
-  @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(50)
-  usuario?: string;
-
   @ApiPropertyOptional({ example: 'novaSenha123' })
   @IsOptional()
   @IsString()

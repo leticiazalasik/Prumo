@@ -5,7 +5,6 @@ import { PerfilUsuario } from './perfil.enum';
 
 @Entity('Usuarios')
 
-@Unique('uq_usuario', ['usuario'])
 @Unique('uq_email', ['email'])
 export class Usuario {
 
@@ -41,13 +40,6 @@ export class Usuario {
   @Column({ type: 'varchar', length: 60 })
   declare email: string;
 
-  @ApiProperty({
-    example: 'leticiaz',
-    description: 'Nome de usuário utilizado para acesso ao sistema',
-  })
-  @Column({ type: 'varchar', length: 50 })
-  declare usuario: string;
-
   @ApiHideProperty()
   @Exclude()
   @Column({ type: 'varchar', length: 100 })
@@ -65,6 +57,6 @@ export class Usuario {
     example: true,
     description: 'Indica se o usuário está ativo',
   })
-  @Column({ type: 'boolean', nullable: true, default: true })
+  @Column({ type: 'boolean', nullable: false, default: true })
   declare ativo: boolean;
 }

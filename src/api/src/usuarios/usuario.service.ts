@@ -52,8 +52,8 @@ export class UsuarioService {
 
 }
 
-async findByUsuario(usuario: string): Promise<Usuario | null> {
-  return this.usuarioRepository.findOne({ where: { usuario } });
+async findByEmail(email: string): Promise<Usuario | null> {
+  return this.usuarioRepository.findOne({ where: { email } });
 }
 
 async update(
