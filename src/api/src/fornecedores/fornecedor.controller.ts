@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
@@ -59,7 +59,7 @@ findAll() {
 })
 @Get(':id')
 @UseGuards(JwtAuthGuard)
-findOne(@Param('id') id: number) {
+findOne(@Param('id', ParseIntPipe) id: number) {
   return this.fornecedorService.findOne(id);
 }
 
@@ -81,7 +81,7 @@ findOne(@Param('id') id: number) {
 @Patch(':id')
 @UseGuards(JwtAuthGuard)
 update(
-  @Param('id') id: number,
+  @Param('id', ParseIntPipe) id: number,
   @Body() updateFornecedorDto: UpdateFornecedorDto,
 ) {
   return this.fornecedorService.update(id, updateFornecedorDto);
@@ -110,7 +110,7 @@ update(
 })
 @Delete(':id')
 @UseGuards(JwtAuthGuard)
-remove(@Param('id') id: number) {
+remove(@Param('id', ParseIntPipe) id: number) {
   return this.fornecedorService.desativar(id);
 }
 }

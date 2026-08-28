@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
@@ -65,7 +65,7 @@ findAll() {
 })
 @Get(':id')
 @UseGuards(JwtAuthGuard)
-findOne(@Param('id') id: number) {
+findOne(@Param('id', ParseIntPipe) id: number) {
   return this.movimentacaoService.findOne(id);
 }
 

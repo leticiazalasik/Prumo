@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Usuario } from "./usuario.entity";
+import { LogPerfil } from "./log-perfil.entity";
 import { Repository } from 'typeorm';
 import { UpdateUsuarioDto } from "./dto/update-usuario.dto";
 import { ConflictException } from '@nestjs/common';
@@ -13,7 +14,9 @@ const SALT_ROUNDS = 10;
 export class UsuarioService {
   constructor(
     @InjectRepository(Usuario)
-    private usuarioRepository: Repository<Usuario>
+    private usuarioRepository: Repository<Usuario>,
+    @InjectRepository(LogPerfil)
+    private logPerfilRepository: Repository<LogPerfil>,
   ) {}
 
  async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
@@ -56,14 +59,29 @@ async findByUsuario(usuario: string): Promise<Usuario | null> {
 async update(
     id: number,
     updateUsuarioDto: UpdateUsuarioDto,
+    operadorId?: number,
 ): Promise<Usuario | null>{
     const dados: UpdateUsuarioDto = { ...updateUsuarioDto };
 
     if (dados.senha) {
       dados.senha = await bcrypt.hash(dados.senha, SALT_ROUNDS);
     }
+    const usuarioAntes = dados.perfil
+      ? await this.usuarioRepository.findOne({ where: { id } })
+      : null;
 
     await this.usuarioRepository.update(id, dados);
+
+    if (usuarioAntes && dados.perfil && usuarioAntes.perfil !== dados.perfil && operadorId) {
+      const log = this.logPerfilRepository.create({
+        operador_id: operadorId,
+        alvo_id: id,
+        perfil_anterior: usuarioAntes.perfil,
+        perfil_atual: dados.perfil,
+      });
+      await this.logPerfilRepository.save(log);
+    }
+
     return this.findOne(id);
 }
 

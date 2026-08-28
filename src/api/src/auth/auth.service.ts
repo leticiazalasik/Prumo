@@ -21,7 +21,11 @@ export class AuthService {
       throw new UnauthorizedException('Usuário ou senha inválidos.');
     }
 
-    const payload = {sub: usuario.id, username: usuario.usuario};
+    const payload = {
+      sub: usuario.id,
+      usuario: usuario.usuario,
+      perfil: usuario.perfil,
+    };
 
     return { access_token: this.jwtService.sign(payload) 
 
