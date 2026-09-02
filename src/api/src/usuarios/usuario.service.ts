@@ -10,6 +10,10 @@ import * as bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 10;
 
+function normalizarEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
 @Injectable()
 export class UsuarioService {
   constructor(
@@ -25,6 +29,7 @@ export class UsuarioService {
 
     const usuario = this.usuarioRepository.create({
       ...createUsuarioDto,
+      email: normalizarEmail(createUsuarioDto.email),
       senha: senhaHash,
     });
 
@@ -53,7 +58,7 @@ export class UsuarioService {
 }
 
 async findByEmail(email: string): Promise<Usuario | null> {
-  return this.usuarioRepository.findOne({ where: { email } });
+  return this.usuarioRepository.findOne({ where: { email: normalizarEmail(email) } });
 }
 
 async update(
@@ -62,6 +67,10 @@ async update(
     operadorId?: number,
 ): Promise<Usuario | null>{
     const dados: UpdateUsuarioDto = { ...updateUsuarioDto };
+
+    if (dados.email) {
+      dados.email = normalizarEmail(dados.email);
+    }
 
     if (dados.senha) {
       dados.senha = await bcrypt.hash(dados.senha, SALT_ROUNDS);

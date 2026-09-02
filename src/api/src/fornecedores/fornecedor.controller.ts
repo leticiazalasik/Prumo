@@ -103,7 +103,7 @@ update(
     example: {
       id: 1,
       nome: 'Prumo Ltda',
-      cnpj: '12.345.678/0001-90',
+      cnpj: '33.000.167/0001-01',
       ativo: false,
     },
   },

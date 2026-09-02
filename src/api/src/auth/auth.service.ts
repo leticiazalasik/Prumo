@@ -22,6 +22,10 @@ export class AuthService {
       throw new UnauthorizedException('Usuário ou senha inválidos.');
     }
 
+    if (!usuario.ativo) {
+      throw new UnauthorizedException('Usuário ou senha inválidos.');
+    }
+
     const payload = {
       sub: usuario.id,
       email: usuario.email,
