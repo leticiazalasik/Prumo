@@ -6,6 +6,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
+import { IsCnpj } from '../../fornecedores/cnpj.validator';
 
 export class CreateFornecedorDto {
   @ApiProperty({
@@ -18,13 +19,14 @@ export class CreateFornecedorDto {
   nome!: string;
 
   @ApiProperty({
-    example: '12.345.678/0001-90',
+    example: '33.000.167/0001-01',
     description: 'CNPJ do fornecedor',
     required: true,
   })
   @IsString()
   @IsNotEmpty()
   @MaxLength(18)
+  @IsCnpj()
   cnpj!: string;
 
   @ApiProperty({
