@@ -4,6 +4,7 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { Usuarios } from './pages/usuarios/usuarios';
 import { MainLayout } from './components/main-layout/main-layout';
 import { ListaOrdemCompra } from './pages/ordem-compra/lista-ordem-compra/lista-ordem-compra';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,6 +12,7 @@ export const routes: Routes = [
   {
     path: '',
     component:MainLayout,
+    canActivate: [authGuard],
     children: [
       { path: 'dashboard', component: Dashboard },
       { path: 'usuarios', component: Usuarios },
