@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - develop
+
+jobs:
+  api:
+    name: API (build e testes)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src/api/package-lock.json
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+
+  web:
+    name: Web (build e testes)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src/web/package-lock.json
+
+      - run: npm ci
+
+      # A pasta environments fica fora do git; a CI cria uma versão só para compilar.
+      - name: Criar arquivos de environment
+        run: |
+          mkdir -p src/environments
+          for arquivo in environment.ts environment.development.ts; do
+            echo "export const environment = { production: false, api_url: 'http://localhost:3000' };" > "src/environments/$arquivo"
+          done
+
+      # Build de desenvolvimento: pega erro de compilação sem aplicar o
+      # limite de tamanho do bundle, que o build de produção ainda estoura.
+      - run: npx ng build --configuration development
+
+      - run: npx ng test --watch=false

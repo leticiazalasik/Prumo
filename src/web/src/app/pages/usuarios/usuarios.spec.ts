@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 
 import { Usuarios } from './usuarios';
 import { UsuarioService } from '../../services/usuario.service';
+import { AuthService } from '../../services/auth.service';
 
 describe('Usuarios', () => {
   let component: Usuarios;
@@ -13,6 +14,13 @@ describe('Usuarios', () => {
     create: vi.fn(() => of(1)),
     update: vi.fn(() => of(void 0)),
     desativar: vi.fn(() => of(void 0)),
+  };
+
+  // Logado como ADMIN, editando o cadastro de outra pessoa.
+  const authServiceMock = {
+    getPerfil: () => 'ADMIN',
+    getUsuarioId: () => 99,
+    temPerfil: () => true,
   };
 
   beforeEach(async () => {
@@ -28,6 +36,7 @@ describe('Usuarios', () => {
           provide: UsuarioService,
           useValue: usuarioServiceMock,
         },
+        { provide: AuthService, useValue: authServiceMock },
       ],
     }).compileComponents();
 
@@ -150,6 +159,7 @@ describe('Usuarios', () => {
       'john.doe@email.com',
       true,
       'LIDER',
+      undefined,
     );
 
     expect(component.painelAberto).toBe(false);

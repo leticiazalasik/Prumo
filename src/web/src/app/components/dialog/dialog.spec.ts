@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Dialog } from './dialog';
 
@@ -8,7 +9,11 @@ describe('Dialog', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Dialog]
+      imports: [Dialog],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: { title: 'Confirmar', message: 'Deseja continuar?' } },
+        { provide: MatDialogRef, useValue: { close: vi.fn() } },
+      ],
     })
     .compileComponents();
 
@@ -19,5 +24,11 @@ describe('Dialog', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('exibe o título e a mensagem recebidos', () => {
+    const texto = (fixture.nativeElement as HTMLElement).textContent;
+    expect(texto).toContain('Confirmar');
+    expect(texto).toContain('Deseja continuar?');
   });
 });
